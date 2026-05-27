@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Escolar - Sistema Profissional de Gestão</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processando...</p>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-area">
+                    <i class="fas fa-book-open"></i>
+                    <h1>Biblioteca Escolar</h1>
+                </div>
+               
+            </div>
+        </header>
+
+        <!-- Tela de Login -->
+        <div id="loginSection" class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-icon-animation">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2>Acesso ao Sistema</h2>
+                    <p>Entre com suas credenciais institucionais</p>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> E-mail institucional</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="off">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="loginPassword" placeholder="••••••">
+                        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-user-tag"></i> Tipo de usuário</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-users input-icon"></i>
+                        <select id="loginPerfil">
+                            <option value="aluno">👨‍🎓 Aluno</option>
+                            <option value="bibliotecario">📚 Bibliotecário</option>
+                            <option value="funcionario">👔 Funcionário</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="btnLogin" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Entrar no Sistema
+                </button>
+                
+                <div class="login-demo">
+                    <p><i class="fas fa-shield-alt"></i> <strong>Sistema Seguro</strong></p>
+                    <p>Digite suas credenciais institucionais para acessar o sistema.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel Principal -->
+        <div id="mainPanel" style="display: none;">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <strong id="userNameDisplay">Usuário</strong>
+                        <span class="user-badge" id="userPerfilDisplay"></span>
+                    </div>
+                </div>
+                <div class="top-actions">
+                    <button id="btnNotifications" class="icon-btn" title="Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationBadge" class="notification-badge">0</span>
+                    </button>
+                    <button id="btnLogout" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notifications Panel -->
+            <div id="notificationsPanel" class="notifications-panel" style="display: none;">
+                <div class="notifications-header">
+                    <h4><i class="fas fa-bell"></i> Notificações</h4>
+                    <button id="btnClearNotifications" class="btn-text">Limpar todas</button>
+                </div>
+                <div id="notificationsList" class="notifications-list"></div>
+            </div>
+
+            <!-- ========== PAINEL DO ALUNO ========== -->
+            <div id="alunoPanel">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <i class="fas fa-book-reader card-icon"></i>
+                            <h3>Empréstimos Ativos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="alunoEmprestimosAtivos" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <i class="fas fa-history card-icon"></i>
+                            <h3>Histórico de Leitura</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="alunoHistoricoLeitura" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line card-icon"></i>
+                            <h3>Estatísticas Pessoais</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="alunoResumo" class="stats-mini"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <i class="fas fa-star card-icon"></i>
+                            <h3>Recomendações para Você</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="alunoRecomendacoes" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card full-width">
+                        <div class="card-header">
+                            <i class="fas fa-search card-icon"></i>
+                            <h3>Buscar Livros no Acervo</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="search-area">
+                                <div class="search-input-wrapper">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" id="alunoSearchInput" placeholder="Pesquisar por título, autor, ISBN ou categoria...">
+                                </div>
+                                <select id="alunoSearchFilter" class="filter-select">
+                                    <option value="all">Todos</option>
+                                    <option value="nome">Título</option>
+                                    <option value="autor">Autor</option>
+                                    <option value="categoria">Categoria</option>
+                                </select>
+                                <button id="btnAlunoSearch" class="btn-secondary"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+                            <div id="alunoSearchResults" class="books-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== PAINEL DO BIBLIOTECÁRIO / FUNCIONÁRIO ========== -->
+            <div id="bibliotecarioPanel" style="display: none;">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+                    <button class="tab-btn" data-tab="busca"><i class="fas fa-search"></i> Buscar Livros</button>
+                    <button class="tab-btn" data-tab="emprestimos"><i class="fas fa-exchange-alt"></i> Empréstimos</button>
+                    <button class="tab-btn" data-tab="cadastroLivro"><i class="fas fa-plus-circle"></i> Cadastrar Livro</button>
+                    <button class="tab-btn" data-tab="cadastroUsuario"><i class="fas fa-user-plus"></i> Cadastrar Usuário</button>
+                    <button class="tab-btn" data-tab="relatorios"><i class="fas fa-chart-bar"></i> Relatórios</button>
+                    <button class="tab-btn admin-only" data-tab="adminPanel"><i class="fas fa-cogs"></i> Administração</button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Dashboard -->
+                    <div id="tabDashboard" class="tab-pane active">
+                        <div class="stats-grid">
+                            <div class="stat-card-large">
+                                <i class="fas fa-book"></i>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="statTotalLivros">0</span>
+                                    <span class="stat-label">Total de Livros</span>
+                                </div>
+                            </div>
+                            <div class="stat-card-large">
+                                <i class="fas fa-users"></i>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="statTotalUsuarios">0</span>
+                                    <span class="stat-label">Usuários Ativos</span>
+                                </div>
+                            </div>
+                            <div class="stat-card-large">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="statEmprestimosAtivos">0</span>
+                                    <span class="stat-label">Empréstimos Ativos</span>
+                                </div>
+                            </div>
+                            <div class="stat-card-large">
+                                <i class="fas fa-clock"></i>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="statEmprestimosAtrasados">0</span>
+                                    <span class="stat-label">Atrasados</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two-columns">
+                            <div class="card">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Alertas de Atraso</h3>
+                                <div id="alertasAtraso" class="info-list"></div>
+                            </div>
+                            <div class="card">
+                                <h3><i class="fas fa-chart-line"></i> Empréstimos Últimos 7 Dias</h3>
+                                <div id="graficoEmprestimos" class="chart-placeholder">
+                                    <i class="fas fa-chart-line"></i> Gráfico em desenvolvimento
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabBusca" class="tab-pane">
+                        <div class="card">
+                            <h3><i class="fas fa-search"></i> Busca Avançada</h3>
+                            <div class="search-area">
+                                <div class="search-input-wrapper">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" id="biblioSearchInput" placeholder="Buscar por título, autor, ISBN ou categoria...">
+                                </div>
+                                <select id="biblioSearchFilter" class="filter-select">
+                                    <option value="all">Todos</option>
+                                    <option value="nome">Título</option>
+                                    <option value="autor">Autor</option>
+                                    <option value="categoria">Categoria</option>
+                                </select>
+                                <button id="btnBiblioSearch" class="btn-secondary"><i class="fas fa-search"></i> Pesquisar</button>
+                            </div>
+                            <div id="biblioSearchResults" class="books-grid"></div>
+                        </div>
+                    </div>
+
+                    <div id="tabEmprestimos" class="tab-pane">
+                        <div class="two-columns">
+                            <div class="card">
+                                <h3><i class="fas fa-hand-holding-heart"></i> Novo Empréstimo</h3>
+                                <div class="form-group">
+                                    <label><i class="fas fa-user-graduate"></i> Aluno:</label>
+                                    <select id="selectUserEmprestimo" class="form-select"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-book"></i> Livro:</label>
+                                    <select id="selectLivroEmprestimo" class="form-select"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-calendar-alt"></i> Dias para devolução</label>
+                                    <select id="diasDevolucao" class="form-select">
+                                        <option value="7">7 dias</option>
+                                        <option value="14">14 dias</option>
+                                        <option value="21">21 dias</option>
+                                        <option value="30">30 dias</option>
+                                    </select>
+                                </div>
+                                <button id="btnRealizarEmprestimo" class="btn-success"><i class="fas fa-check"></i> Realizar Empréstimo</button>
+                            </div>
+                            <div class="card">
+                                <h3><i class="fas fa-undo-alt"></i> Registrar Devolução</h3>
+                                <div class="form-group">
+                                    <label><i class="fas fa-list"></i> Empréstimo Ativo:</label>
+                                    <select id="selectEmprestimoDevolucao" class="form-select"></select>
+                                </div>
+                                <button id="btnRealizarDevolucao" class="btn-warning"><i class="fas fa-check-double"></i> Confirmar Devolução</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-clock"></i> Todos os Empréstimos Ativos</h3>
+                            <div id="emprestimosAtivosList" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div id="tabCadastroLivro" class="tab-pane">
+                        <div class="card">
+                            <h3><i class="fas fa-plus-circle"></i> Cadastrar Novo Livro</h3>
+                            <div class="form-row">
+                                <input type="text" id="livroNome" placeholder="Título do livro" class="form-input">
+                                <input type="text" id="livroAutor" placeholder="Autor" class="form-input">
+                                <input type="text" id="livroISBN" placeholder="ISBN" class="form-input">
+                                <input type="text" id="livroCategoria" placeholder="Categoria" class="form-input">
+                                <input type="number" id="livroQuantidade" placeholder="Quantidade" class="form-input" min="1" value="1">
+                                <input type="text" id="livroEditora" placeholder="Editora" class="form-input">
+                                <input type="number" id="livroAno" placeholder="Ano" class="form-input">
+                                <button id="btnCadastrarLivro" class="btn-primary"><i class="fas fa-save"></i> Cadastrar</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-database"></i> Acervo da Biblioteca</h3>
+                            <div id="listaLivrosCadastro" class="books-grid"></div>
+                        </div>
+                    </div>
+
+                    <div id="tabCadastroUsuario" class="tab-pane">
+                        <div class="card">
+                            <h3><i class="fas fa-user-plus"></i> Cadastrar Novo Usuário</h3>
+                            <div class="form-row">
+                                <input type="text" id="usuarioNome" placeholder="Nome completo" class="form-input">
+                                <input type="email" id="usuarioEmail" placeholder="E-mail institucional" class="form-input">
+                                <input type="text" id="usuarioMatricula" placeholder="Matrícula / RA" class="form-input">
+                                <select id="usuarioPerfil" class="form-select">
+                                    <option value="aluno">Aluno</option>
+                                    <option value="bibliotecario">Bibliotecário</option>
+                                    <option value="funcionario">Funcionário</option>
+                                </select>
+                                <input type="text" id="usuarioSenha" placeholder="Senha" class="form-input" value="123">
+                                <button id="btnCadastrarUsuario" class="btn-primary"><i class="fas fa-save"></i> Cadastrar</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-users"></i> Usuários do Sistema</h3>
+                            <div id="listaUsuarios" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div id="tabRelatorios" class="tab-pane">
+                        <div class="card">
+                            <h3><i class="fas fa-chart-pie"></i> Estatísticas da Biblioteca</h3>
+                            <div id="estatisticas" class="stats-container"></div>
+                        </div>
+                        <div class="two-columns">
+                            <div class="card">
+                                <h3><i class="fas fa-trophy"></i> Ranking de Leitura</h3>
+                                <div id="rankingLeitores" class="info-list"></div>
+                            </div>
+                            <div class="card">
+                                <h3><i class="fas fa-fire"></i> Livros Mais Populares</h3>
+                                <div id="rankingLivros" class="info-list"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-history"></i> Histórico Completo</h3>
+                            <div id="historicoCompleto" class="info-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Painel Admin (apenas para funcionários com permissão) -->
+                    <div id="tabAdminPanel" class="tab-pane admin-only">
+                        <div class="card">
+                            <h3><i class="fas fa-database"></i> Backup e Restauração</h3>
+                            <div class="form-row">
+                                <button id="btnExportarDados" class="btn-secondary"><i class="fas fa-download"></i> Exportar Dados (JSON)</button>
+                                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                                <button id="btnImportarDados" class="btn-secondary"><i class="fas fa-upload"></i> Importar Dados</button>
+                                <button id="btnResetarDados" class="btn-danger"><i class="fas fa-trash-alt"></i> Resetar Sistema</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-cog"></i> Configurações do Sistema</h3>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-week"></i> Prazo padrão de empréstimo (dias)</label>
+                                <input type="number" id="configPrazoPadrao" value="7" class="form-input" style="width: 100px;">
+                                <button id="btnSalvarConfig" class="btn-primary">Salvar Configurações</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
